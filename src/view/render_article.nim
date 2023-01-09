@@ -43,9 +43,3 @@
         <span><div id="content">${$!content}</div></span>
 !
 !end proc
-!    
-!when isMainModule:
-!   echo(header("Title"))
-!   echo(body("kaiwulf<>", "this is the content", "THIS IS IT!"))
-!   echo(footer())
-!end when

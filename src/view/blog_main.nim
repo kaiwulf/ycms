@@ -2,19 +2,11 @@
 !import strutils
 !import get_articles
 !import render_article
+!import render_summary
 !import ../structures
 !
 !proc `$!`(text: string): string =
 !   text.escape()
-!end proc
-!
-!proc render_blog_articles(num: int): string =
-!   var x: string
-!   let articles = get_articles_from_db(num)
-!   for arts in articles:
-!       x = header(arts.title) & body(arts.title, arts.content, arts.publicationDate) &  footer()
-!   end for
-!   return x
 !end proc
 !
 ! # num_articles is number of 
@@ -22,17 +14,17 @@
 !let num_articles = 3
 ! # num_articles_page is number of articles per page which is configured in backend
 !let num_articles_page = 5
-!proc render_blog_main*(title: string, content: string, header: string, articles: seq[Article]): string =
+!proc render_blog_main*(): string =
 !result = ""
 <!DOCTYPE html>
     <body>
         <link rel="stylesheet" href="../style.css">
-        <title>${$!title}</title>
+        <title>Adventures in Tech</title>
         <div id=container>
-            <h1>${$!title}</h1>
+            <h1>header 1</h1>
             <div id=content>
-                <h2>${$!header}</h2>
-                ${$!render_blog_articles(num_articles_page)}
+                <h2>header 2</h2>
+                <a href="render_summary" ${$!render_blog_summary(num_articles_page)} </a>
                 
             </div>
         </div>

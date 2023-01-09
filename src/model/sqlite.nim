@@ -45,6 +45,11 @@ proc fetch_article*(database: Database, id: string): Article =
   let article = Article(id: id, publicationDate: publicationDate, title: title, summary: summary, content: content)
   return article
 
+proc fetch_summary*(database: Database, id: string): array[3, string] =
+  let title = database.db.getValue(sql"SELECT title FROM article WHERE id = ?", id)
+  let summary = database.db.getValue(sql"SELECT summary FROM article WHERE id = ?",id)
+  return [title, summary, id]
+
 # fetch article from db as sequence
 proc search*(database: Database, id: string): seq[string] =
   var row: seq[string]

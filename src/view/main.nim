@@ -10,7 +10,7 @@
             <h1>Website</h1>
             <div id="content">
                 <h2>header</h2>
-                <a href="./blog_main.html">the kaiblog</a>
+                <a href="./blog_main">the kaiblog</a>
             </div>
         <div id=content>
             <h2>proj1 with webassembly?</h2>
