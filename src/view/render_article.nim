@@ -41,5 +41,10 @@
 !
         <h1 id="title">${$!title}</h1>
         <span><div id="content">${$!content}</div></span>
+!end proc
 !
+!proc full_article*(): string =
+!   var x: string
+!   x = header("kai's blog") & body("kai's blog", "this is it!", "5-23-2101") & footer()
+!   return x
 !end proc

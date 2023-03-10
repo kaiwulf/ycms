@@ -1,10 +1,10 @@
-#? stdtmpl(subChar = '$', metaChar = '!')
+#? stdtmpl(subsChar = '$', metaChar = '!')
 !
 !proc main_page*(): string =
-!result = ""
-<!DOCTYPE htlm>
+!   result = ""
+<!DOCTYPE html>
     <body>
-        <link rel="stylesheet" href="../style.css">
+        <link rel="stylesheet" href="style.css">
         <title>kaiwulf.dev</title>
         <div id=container>
             <h1>Website</h1>
@@ -19,3 +19,7 @@
     </body>
 </html>
 !end proc
+!
+! when isMainModule:
+!   echo(main_page())
+! end when
