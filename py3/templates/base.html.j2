@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>kaiwulf.dev</title>
+  </head>
+  <body>
+    {% block container %}
+        <div class="wideBox">
+            {% block wideBox %}{% endblock %}
+        </div>
+        <div id="container">
+            <a href="{{ url_for('index') }}"><img id="logo" src="{{ url_for('static', filename='logo.jpg') }}" alt="Kai News" /></a>
+            <title>{% block title %}{%endblock%} - Kai Wulf</title>
+            <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
+            <section class="content">
+                <header>
+                    {% block header %}{% endblock %}
+                </header>
+                {% for message in get_flashed_messages() %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+                {% block content %}{% endblock %}
+            </section>
+        </div>
+    {% endblock %}
+    <div class="wideBox">
+        <div id="footer">
+        kaiwulf.dev &copy; 2023. All rights reserved. <a href="{{ url_for('auth.login') }}">Site Admin</a>
+        </div>
+        <p>&copy; Kai Wulf | <a href="http://kaiwulf.dev">Back to Home</a></p>
+        <p style="font-size: .8em; line-height: 1.5em;">
+            <a rel="license" href="http://creatvecommons.org/licenses/by/3.0/">
+                <img alt="Creative Commons License" style="border-width:0" src="{{ url_for('static', filename='88x31.png') }}" /></a>
+            <br />This
+                <span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" rel="dc:type">work</span> by 
+            <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.sagewulf.com/" property="cc:attributionName" rel="cc:attributionURL">http://www.sagewulf.com/</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.
+        </p>
+    </div>
+</html>

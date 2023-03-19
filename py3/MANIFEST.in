@@ -1,0 +1,4 @@
+include py3/schema.sql
+graft py3/static
+graft py3/templates
+global-exclude *.pyc
