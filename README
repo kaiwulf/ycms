@@ -2,6 +2,8 @@ yCMS - yellow Content Management System
 
 A custom CMS for kaiwulf.dev
 
-Why yellow? nim makes me think of the color yellow.
+Why yellow? Why not?
 
-Plans in the future for yCMS is to make a responsive, cli driven web builder.
+Currently a CMS for a personal site but plan on expanding it in the future.
+
+For now, to run, type in `cat run` in linux command line. Untested on Windows and MacOS.
