@@ -1,13 +1,25 @@
 {% extends 'base.html' %}
 
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script src="url_for('static', 'ev-graph.js')"></script>
+
 {% block wideBox %}
     <h1>Tech & Other Stuff</h1>
     <p><strong>Hi!</strong> Welcome to the site!</p>
 {% endblock %}
+
+{% block title %}Home{% endblock %}
+
+{% block header %}<h1>Kai Wulf Home</h1>{% endblock %}
 
 {% block content %}
     <a href="{{ url_for('blog.blog_index') }}"><h3>kai's blog</h3></a>
     <h2>Projects</h2>
     <p>Coming soon!</p>
     <img id="construction" src="{{ url_for('static', filename='P9Q7.gif') }}" />
+{% endblock %}
+
+{% block project %}
 {% endblock %}

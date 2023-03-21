@@ -55,7 +55,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('auth.backend'))
 
         flash(error)
     return render_template('auth/login.html')
@@ -84,3 +84,13 @@ def login_required(view):
 
         return view(**kwargs)
     return wrapped_view
+
+@bp.route('/backend')
+def backend():
+    db = get_db()
+    posts = db.execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' ORDER BY created DESC'
+    ).fetchall()
+    return render_template('auth/backend.html', posts=posts)

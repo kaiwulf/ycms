@@ -1,10 +1,6 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, render_template
 )
-from werkzeug.exceptions import abort
-
-from py3.auth import login_required
-from py3.db import get_db
 
 bp = Blueprint('index', __name__)
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>kaiwulf.dev</title>
+    <title>{% block title %}{%endblock%} - Kai Wulf</title>
   </head>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
   <body>
@@ -11,7 +11,7 @@
         </div>
         <div id="container">
             <a href="{{ url_for('index') }}"><img id="logo" src="{{ url_for('static', filename='logo.jpg') }}" alt="Kai News" /></a>
-            <title>{% block title %}{%endblock%} - Kai Wulf</title>
+            {# <title>{% block title %}{%endblock%} - Kai Wulf</title> #}
             <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
             <section class="content">
                 <header>
