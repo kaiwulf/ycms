@@ -1,6 +1,9 @@
 from flask import Flask
 import os
 from . import db
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+
 
 # def ycms_factory(test_config=None):
 def create_app(test_config=None):
@@ -10,6 +13,11 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'ycms.sqlite'),
+    )
+
+    # Tell flask it is behind a proxy server
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
     )
 
     if test_config is None:
