@@ -33,7 +33,7 @@ def register():
                 error = f"User {username} is already registered"
             else:
                 return redirect(url_for("auth.login"))
-        flash(error)
+        # flush(error)
     return render_template('auth/register.html')
 
 @bp.route('/login', methods=('GET','POST'))
@@ -41,6 +41,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        # new_password = request.form['new-password']
         db = get_db()
         error = None
         user = db.execute(
@@ -49,15 +50,31 @@ def login():
 
         if user is None:
             error = 'Incorrect username'
+        # This code will be for updating password in a new page in auth/
+        # elif new_password:
+        #     try:
+        #         db.execute(
+        #             "UPDATE user SET password = ? WHERE username = ?", (generate_password_hash(new_password), username)
+        #         )
+        #         db.commit()
+        #     except db.IntegrityError:
+        #         error = f"Error changing password"
+        #     else:
+        #         return redirect(url_for("auth.login"))
+        # if password is not None:
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password'
+        else:
+            print(f"password empty")
+
+        print(f"error: {error}")
         
         if error is None:
             session.clear()
             session['user_id'] = user['id']
             return redirect(url_for('auth.backend'))
 
-        flash(error)
+        # flush(error)
     return render_template('auth/login.html')
 
 @bp.before_app_request
