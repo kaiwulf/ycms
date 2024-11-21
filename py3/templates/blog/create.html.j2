@@ -1,19 +1,63 @@
 {% extends 'base.html' %} {# will extend backend #}
 
+
+
 {% block wideBox %}
     <h2>Site administration</h2>
 {% endblock %}
 
 {% block header %}
+    <style>
+        #container {
+            width: 100% !important;
+        }
+    </style>
     <h1>{% block title %}New Post{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" id="blog-form">
+        <div class="container">
+                <div class="editor-container">
+                    <div class="editor-pane">
+                        <div class="pane-editor">Markdown</div>
+                        <textarea id="markdown-input"># Welcome to the Blog Editor
+
+                            Write your blog post here using Markdown!
+                            
+                            ## Features
+                            - Real-time preview
+                            - Markdown support
+                            - Saves directly to your blog
+                            
+                            ### Start Writing
+                            Your content goes here...</textarea>
+                    </div>
+                    <div class="editor-pane">
+                        <div class="pane-header">Preview</div>
+                        <div id="preview-pane"></div>
+                    </div>
+                </div>
+                <div class="toolbar">
+                    <input
+                        type="text"
+                        name="title"
+                        class="title-input"
+                        placeholder="Title"
+                        required
+                    >
+                    <button type="submit" class="post-button">Post</button>
+                </div>
+                <input type="hidden" name="body" id="hidden-body">
+            </div>
+
+    <!--
         <label for="title">Title</label>
         <input name="title" id="title" value="{{ request.form['title'] }}" required>
         <label for="body">Body</label>
         <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
-        <input type="submit" value="Save">
+        <input type="submit" value="Save"> -->
     </form>
+    <script src="{{ url_for('static', filename='translate.js') }}"></script>
+    <script src="{{ url_for('static', filename='marked.min.js') }}"></script>
 {% endblock %}
