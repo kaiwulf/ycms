@@ -17,10 +17,25 @@
 
 {% block content %}
     <form method="post" id="blog-form">
+        {{ form.csrf_token }}
         <div class="container">
                 <div class="editor-container">
+                    {# <div class="form-group mb-4">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control") }}
+                        {% if form.title.error %}
+                            {% for error in form.title.errors %}
+                                <span class="error-message">{{ error }}</span>
+                            {% endfor %}
+                        {% endif %} #}
                     <div class="editor-pane">
                         <div class="pane-editor">Markdown</div>
+                        {# {{ form.body(class="form-control", rows="15", id="markdown-editor") }}
+                        {% if form.body.errors %}
+                            {% for error in form.body.errors %}
+                                <span class="error-message">{{ error }}</span>
+                            {% endfor %}
+                        {% endif %} #}
                         <textarea id="markdown-input"># Welcome to the Blog Editor
 
                             Write your blog post here using Markdown!
@@ -33,6 +48,7 @@
                             ### Start Writing
                             Your content goes here...</textarea>
                     </div>
+                    
                     <div class="editor-pane">
                         <div class="pane-header">Preview</div>
                         <div id="preview-pane"></div>
@@ -48,7 +64,9 @@
                     >
                     <button type="submit" class="post-button">Post</button>
                 </div>
-                <input type="hidden" name="body" id="hidden-body">
+                {# <input type="hidden" name="body" id="hidden-body"> #}
+                {{ form.title(id="hidden-title", type="hidden") }}
+                {{ form.body(id="hidden-body", type="hidden")}}
             </div>
 
     <!--
@@ -58,6 +76,16 @@
         <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
         <input type="submit" value="Save"> -->
     </form>
+    <script>
+document.getElementById('markdown-editor').addEventListener('input', function() {
+    // Add your markdown preview logic here
+    const markdown = this.value;
+    const previewPane = document.getElementById('preview-pane');
+    // Convert markdown to HTML and update preview-pane and hidden input
+    // You'll need to include a markdown parser library
+    document.getElementById('hidden-body').value = convertedHtml; // Update with your converted HTML
+});
+</script>
     <script src="{{ url_for('static', filename='translate.js') }}"></script>
     <script src="{{ url_for('static', filename='marked.min.js') }}"></script>
 {% endblock %}
