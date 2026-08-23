@@ -1,3 +1,5 @@
 venv/
 ycms.code-workspace
 __pycache__/
+instance/
+CLAUDE_FILES/

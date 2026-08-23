@@ -1,13 +1,13 @@
 import functools
-
 from flask import (
     Blueprint, g, redirect, render_template, request, session, url_for
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
-from py3.db import get_db
+from .db import get_db
 
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+bp = Blueprint('auth', __name__, url_prefix='/auth',
+               template_folder='templates')
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
@@ -34,7 +34,7 @@ def register():
             else:
                 return redirect(url_for("auth.login"))
         # flush(error)
-    return render_template('auth/register.html')
+    return render_template('ycms/auth/register.html')
 
 @bp.route('/login', methods=('GET','POST'))
 def login():
@@ -64,18 +64,14 @@ def login():
         # if password is not None:
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password'
-        else:
-            print(f"password empty")
-
-        print(f"error: {error}")
         
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('auth.backend'))
+            return redirect(url_for('admin.dashboard'))
 
         # flush(error)
-    return render_template('auth/login.html')
+    return render_template('ycms/auth/login.html')
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -101,13 +97,3 @@ def login_required(view):
 
         return view(**kwargs)
     return wrapped_view
-
-@bp.route('/backend')
-def backend():
-    db = get_db()
-    posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
-    ).fetchall()
-    return render_template('auth/backend.html', posts=posts)

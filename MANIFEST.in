@@ -1,0 +1,6 @@
+include ycms/schema.sql
+graft ycms/static
+graft ycms/templates
+graft kaiwulf/static
+graft kaiwulf/templates
+global-exclude *.pyc

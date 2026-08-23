@@ -1,6 +1,11 @@
+import os
 import sqlite3
 import click
 from flask import current_app, g
+
+# schema.sql ships with this package, so locate it relative to this file
+# rather than relative to whichever app happens to be running.
+SCHEMA_PATH = os.path.join(os.path.dirname(__file__), 'schema.sql')
 
 def get_db():
     if 'db' not in g:
@@ -9,6 +14,9 @@ def get_db():
             detect_types=sqlite3.PARSE_DECLTYPES
         )
         g.db.row_factory = sqlite3.Row
+        # SQLite ignores FOREIGN KEY constraints unless this is switched on,
+        # and it is per-connection, so it must be set on every connect.
+        g.db.execute('PRAGMA foreign_keys = ON')
     return g.db
 
 def close_db(e=None):
@@ -19,8 +27,8 @@ def close_db(e=None):
 
 def init_db():
     db = get_db()
-    with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+    with open(SCHEMA_PATH, encoding='utf8') as f:
+        db.executescript(f.read())
 
 @click.command('init-db')
 def init_db_command():
