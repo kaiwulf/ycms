@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
+from flask_wtf.csrf import CSRFProtect
 
 
 def create_app(test_config=None):
@@ -22,7 +23,11 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'ycms.sqlite'),
+        # SCHEMA=os.path.join(app.instance_path, SCHEMA_PATH)
     )
+
+    app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024   # 1 MB cap on request bodies
+    CSRFProtect(app)
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)

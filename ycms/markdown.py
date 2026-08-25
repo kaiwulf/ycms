@@ -5,6 +5,10 @@ import re
 import markdown as md
 import nh3
 
+# Bump whenever render() output changes (new plugin, new sanitizer rule,
+# switching MathML->SVG). Stored body_html is a cache of this version.
+RENDER_VERSION = '1'
+
 ALLOWED_TAGS = {
     'a', 'abbr', 'b', 'blockquote', 'br', 'code', 'em', 'i', 'li', 'ol',
     'p', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',

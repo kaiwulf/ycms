@@ -21,6 +21,8 @@ CREATE TABLE post (
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated TIMESTAMP,
   published_at TIMESTAMP,
+  math_output TEXT NOT NULL DEFAULT 'mathml'
+      CHECK (math_output IN ('mathml', 'svg')),
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
 

@@ -1,5 +1,5 @@
 from .db import get_db
-from .markdown import render, slugify
+from .markdown import render, slugify, make_preview
 
 _POST_COLUMNS = (
     'SELECT p.id, p.title, p.slug, p.body_html, p.body_markdown, p.body_preview, p.status,'
@@ -100,3 +100,7 @@ def rerender_all():
         )
     db.commit()
     return len(rows)
+
+def preview_of(post):
+    """The teaser to display: the author's custom one, or generated."""
+    return post['body_preview'] or make_preview(post['body_markdown'])

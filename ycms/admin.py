@@ -1,9 +1,5 @@
-# Bump whenever render() output changes (new plugin, new sanitizer rule,
-# switching MathML->SVG). Stored body_html is a cache of this version.
-RENDER_VERSION = '1'
-
 from flask import (
-    Blueprint, flash, g, redirect, render_template, url_for
+    Blueprint, flash, g, redirect, render_template, url_for, jsonify, request
 )
 from werkzeug.exceptions import abort
 from flask_wtf import FlaskForm
@@ -12,6 +8,7 @@ from wtforms.validators import DataRequired
 
 from . import content
 from .auth import login_required
+from .markdown import render
 
 bp = Blueprint('admin', __name__, url_prefix='/admin',
                template_folder='templates')
@@ -30,7 +27,6 @@ class PostForm(FlaskForm):
 def dashboard():
     return render_template('ycms/admin/dashboard.html',
                            posts=content.get_all_posts())
-
 
 @bp.route('/new', methods=('GET', 'POST'))
 @login_required
@@ -87,3 +83,13 @@ def delete(post_id):
     content.delete_post(post_id)
     flash('Deleted.')
     return redirect(url_for('admin.dashboard'))
+
+@bp.route('/preview', methods=('POST',))
+@login_required
+def preview():
+    """Render markdown exactly as publish would. Same function, no drift."""
+    data = request.get_json(silent=True) or {}
+    src = data.get('src')
+    if not isinstance(src, str):
+        return jsonify(error='src must be a string'), 400
+    return jsonify(html=render(src))

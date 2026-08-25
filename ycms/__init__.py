@@ -24,6 +24,8 @@ def init_cms(app):
     )
     app.register_blueprint(static_bp)
 
-    from . import admin, cli
+    from . import admin, cli, content
     app.register_blueprint(admin.bp)
     cli.init_cli(app)
+
+    app.jinja_env.filters['post_preview'] = content.preview_of

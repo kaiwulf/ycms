@@ -19,10 +19,10 @@
     {% for post in latest_posts %}
         <article>
             <h1>{{ post['title'] }}</h1>
-            <p class=""metadata">
-                by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}
+            <p class="metadata">
+                by {{ post['username'] }} on {{ post['published_at'].strftime('%Y-%m-%d') }}
             </p>
-            <p>{{ post['body'][:200]|safe }}{% if post['body']|length > 200 %}...{% endif %}</p>
+            <p>{{ post | post_preview }}</p>
         </article>
         {% if not loop.last %}
         <hr>

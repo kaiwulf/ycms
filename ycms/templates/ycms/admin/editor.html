@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block wideBox %}
+    <h2>Site Administration</h2>
+{% endblock %}
+
+{% block header %}
+    <h1>{% block title %}{{ 'Edit Post' if post else 'New Post' }}{% endblock %}</h1>
+    <a class="action" href="{{ url_for('admin.dashboard') }}">← All posts</a>
+    {% if post %}<span class="about">status: <strong>{{ post['status'] }}</strong></span>{% endif %}
+{% endblock %}
+
+{% block content %}
+<form method="post" id="post-form">
+    {{ form.hidden_tag() }}
+
+    <p>
+        {{ form.title.label }}<br>
+        {{ form.title(size=60) }}
+        {{ form.title(size=60) }}
+        {% for error in form.title.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </p>
+
+    <div class="editor-panes">
+        <div class="editor-pane">
+            <div class="pane-header">Markdown</div>
+            {{ form.body_markdown(rows=24, id='editor') }}
+            {% for error in form.body_markdown.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="editor-pane">
+            <div class="pane-header">Preview</div>
+            <div id="preview">{{ (post['body_html'] if post else '') | safe }}<
+        </div>
+    </div>
+
+    <p>
+        {{ form.body_preview.label }}<br>
+        {{ form.body_preview(rows=3, cols=60) }}
+        <span class="about">Leave blank to generate one automatically.</span>
+    </p>
+
+    <p>{{ form.save }} {{ form.publish }}</p>
+</form>
+
+<script>
+(function () {
+    const editor  = document.getElementById('editor');
+    const preview = document.getElementById('preview');
+    const url     = "{{ url_for('admin.preview') }}";
+    const token   = document.querySelector('#post-form [name=csrf_token]').value;
+
+    let timer = null, inflight = null, seq = 0, applied = 0, lastSent = null;
+
+    async function send() {
+        const src = editor.value;
+        if (src === lastSent) return;
+        lastSent = src;
+
+        if (inflight) inflight.abort();
+        const ctrl = new AbortController();
+        inflight = ctrl;
+        const id = ++seq;
+
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': token,
+                },
+                body: JSON.stringify({ src: src }),
+                signal: ctrl.signal,
+            });
+            if (!res.ok) throw new Error('preview ' + res.status);
+            const data = await res.json();
+
+            if (id <= applied) return;      // a newer response already painted
+            applied = id;
+            preview.innerHTML = data.html;
+        } catch (err) {
+            if (err.name === 'AbortError') return;
+            lastSent = null;                // let an identical retry through
+            console.error(err);
+        } finally {
+            if (inflight === ctrl) inflight = null;
+        }
+    }
+
+    editor.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(send, 250);
+    });
+    editor.addEventListener('blur', () => { clearTimeout(timer); send(); });
+})();
+</script>
+{% endblock %}
