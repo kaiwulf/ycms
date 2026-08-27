@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{%endblock%} - Kai Wulf</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
   </head>
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     {% block container %}
         <div class="wideBox">
             {% block wideBox %}{% endblock %}
         </div>
         <div id="container">
             <a href="{{ url_for('site.index') }}"><img id="logo" src="{{ url_for('static', filename='logo.jpg') }}" alt="Kai News" /></a>
-            {# <title>{% block title %}{%endblock%} - Kai Wulf</title> #}
-            <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
             <section class="content">
                 <header>
                     {% block header %}{% endblock %}
@@ -32,11 +31,12 @@
         </div>
         <p>&copy; Kai Wulf | <a href="{{ url_for('site.index') }}">Back to Home</a></p>
         <p style="font-size: .8em; line-height: 1.5em;">
-            <a rel="license" href="http://creatvecommons.org/licenses/by/3.0/">
+            <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">
                 <img alt="Creative Commons License" style="border-width:0" src="{{ url_for('static', filename='88x31.png') }}" /></a>
             <br />This
                 <span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" rel="dc:type">work</span> by 
             <a xmlns:cc="http://creativecommons.org/ns#" {# href="http://www.sagewulf.com/" #} href="javascript:void(0)" onclick="return confirm('comming soon!');" class="thisClicked" property="cc:attributionName" rel="cc:attributionURL">http://www.sagewulf.com/</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.
         </p>
     </div>
+  </body>
 </html>

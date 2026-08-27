@@ -30,18 +30,18 @@
                 <a class="action" href="{{ url_for('admin.edit', post_id=post['id']) }}">Edit</a>
 
                 {% if post['status'] == 'published' %}
-                    <form method="post" style="display:inline"
+                    <form method="post"
                           action="{{ url_for('admin.unpublish', post_id=post['id']) }}">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button type="submit">Unpublish</button>
                     </form>
                 {% endif %}
 
-                <form method="post" style="display:inline"
+                <form method="post" class="js-confirm"
                       action="{{ url_for('admin.delete', post_id=post['id']) }}"
-                      onsubmit="return confirm('Delete «{{ post['title'] }}» permanently?')">
+                      data-confirm="Delete «{{ post['title'] }}» permanently?">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button type="submit">Delete</button>
+                    <button type="submit" class="danger">Delete</button>
                 </form>
             </div>
         </article>
@@ -49,4 +49,19 @@
     {% else %}
         <p>No posts yet. <a href="{{ url_for('admin.create') }}">Write one.</a></p>
     {% endfor %}
+
+{# The confirmation text is carried as data, not as JavaScript source. Reading
+   it via dataset gives us the decoded attribute value as a plain string, so a
+   post title can never become code. Never interpolate a variable into an
+   on* attribute: the browser decodes HTML entities there before the JS parser
+   runs, so HTML escaping does not protect the JavaScript context. #}
+<script>
+document.querySelectorAll('form.js-confirm').forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+        if (!window.confirm(form.dataset.confirm)) {
+            event.preventDefault();
+        }
+    });
+});
+</script>
 {% endblock %}

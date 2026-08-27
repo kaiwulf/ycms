@@ -124,9 +124,51 @@ h2 a {
 }
 
 
-/* Style the form with a coloured background, along with curved corners and a drop shadow */
+/* ---------------------------------------------------------------------------
+   Wide pages.
 
-form {
+   The site's default frame is a fixed 960px `#container` centred in the
+   viewport. That is a good measure for reading a blog post and far too narrow
+   for an editor. A page opts into a fluid frame by filling in base.html's
+   `body_class` block:
+
+       {% block body_class %}wide-page{% endblock %}
+
+   The container and both `.wideBox` bands have to move together or the page
+   steps in and out at every band. They carry different padding (20px vs 10px)
+   and were hand-tuned to 960px and 980px to line up; `border-box` makes the
+   declared width the outer width, so one percentage now covers both.
+   --------------------------------------------------------------------------- */
+
+body.wide-page #container,
+body.wide-page .wideBox {
+  box-sizing: border-box;
+  width: 85%;
+}
+
+/* The rule under the logo is the bottom border of the <img> itself, stretched
+   across the container by a 660px right padding — a fixed length, so at a fluid
+   width it stops short of the edge. Move the border onto the link that wraps
+   the image, which is block-level and tracks the container. */
+
+body.wide-page #container > a {
+  display: block;
+  border-bottom: 1px solid #00a0b0;
+  margin-bottom: 40px;
+}
+
+body.wide-page #logo {
+  padding: 0 0 20px 0;
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+
+/* The centred cream card. Opt-in via class="card" — it used to be a bare
+   `form` selector, which made every form on the site a card, including the
+   one-button POST forms in the admin action rows. */
+
+form.card {
   margin: 20px auto;
   padding: 40px 20px;
   overflow: auto;
@@ -141,27 +183,79 @@ form {
 }
 
 
-/* Give form elements consistent margin, padding and line height */
+/* ---------------------------------------------------------------------------
+   Form controls: a plain baseline for every form in the app.
 
-form ul {
+   Only appearance lives here — border, radius, background, font. Nothing in
+   this group positions or sizes a control, so dropping a field into any page
+   gets it looking like the rest of the site without also inheriting the card
+   layout below.
+   --------------------------------------------------------------------------- */
+
+input, select, textarea {
+  margin: 0;
+  padding: .4em;
+}
+
+input, textarea, .date {
+  border: 2px solid #666;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background: #fff;
+}
+
+input {
+  font-size: .9em;
+}
+
+textarea {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-size: .9em;
+  line-height: 1.5em;
+}
+
+textarea#content {
+  font-family: "Courier New", courier, fixed;
+}
+
+
+/* ---------------------------------------------------------------------------
+   The cream card's two-column form layout — labels in a right-aligned 15%
+   column, fields filling 80% beside them.
+
+   Every rule below is scoped to `form.card` on purpose. These came from a
+   tutorial stylesheet written for a page holding exactly one centred form, so
+   they were written as bare element selectors: `label`, `input, select,
+   textarea`, `form *`. In an app with admin, editor and auth forms that meant
+   every field on every page was pulled into this grid whether it belonged
+   there or not — the editor's "Title" and "Custom teaser" labels floated into
+   a 15% column, and their fields stretched to 80% regardless of the `size` and
+   `cols` the templates asked for.
+
+   Same root cause as the `form { }` card rule above. Add `class="card"` to opt
+   a form into this layout.
+   --------------------------------------------------------------------------- */
+
+form.card ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-form ul li {
+form.card ul li {
   margin: .9em 0 0 0;
   padding: 0;
 }
 
-form * {
+form.card * {
   line-height: 1em;
 }
 
 
 /* The field labels */
 
-label {
+form.card label {
   display: block;
   float: left;
   clear: left;
@@ -174,55 +268,46 @@ label {
 
 /* The fields */
 
-input, select, textarea {
+/* `:not([type="submit"])` keeps the buttons out of the field layout. Scoping
+   these to `form.card` raised their specificity above `input[type="submit"]`
+   below, so without the exclusion the submit button inherits `width: 80%` and
+   the green `:valid` background instead of its own styling. */
+
+form.card input:not([type="submit"]),
+form.card select,
+form.card textarea {
   display: block;
-  margin: 0;
-  padding: .4em;
   width: 80%;
 }
 
-input, textarea, .date {
-  border: 2px solid #666;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;    
-  border-radius: 5px;
-  background: #fff;
-}
-
-input {
-  font-size: .9em;
-}
-
-select {
+form.card select {
   padding: 0;
   margin-bottom: 2.5em;
   position: relative;
   top: .7em;
 }
 
-textarea {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  font-size: .9em;
+form.card textarea {
   height: 5em;
-  line-height: 1.5em;
 }
 
-textarea#content {
-  font-family: "Courier New", courier, fixed;
-}
-  
 
-/* Place a border around focused fields */
+/* Place a border around focused fields.
 
-form *:focus {
+   This rule used to carry `outline: none`, which removed the browser's focus
+   ring and left keyboard users with no indication of where they were on forms
+   that had no other focus styling. The border below is the emphasis; the
+   outline stays. */
+
+form.card *:focus {
   border: 2px solid #7c412b;
-  outline: none;
 }
 
 
 /* Display correctly filled-in fields with a green background */
 
-input:valid, textarea:valid {
+form.card input:not([type="submit"]):valid,
+form.card textarea:valid {
   background: #efe;
 }
 
@@ -413,3 +498,160 @@ tr:hover {
   border-left: 1px solid #ccc;
   box-sizing: border-box;
 }
+
+/* Admin action rows — the Edit / Unpublish / Delete strip under each post */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75em;
+  margin-top: 1em;
+}
+
+/* These forms exist only to carry a POST and its CSRF token, so they should
+   not generate a box at all. `contents` removes the form's own box and
+   promotes the button inside it to a direct flex item of .actions, which is
+   what lets one `gap` space the link and both buttons evenly. The form still
+   exists in the DOM and still submits normally. */
+
+.actions form {
+  display: contents;
+}
+
+.action,
+.actions button {
+  display: inline-block;
+  box-sizing: border-box;
+  width: auto;
+  margin: 0;
+  padding: .5em 1.1em;
+  border: 2px solid #7c412b;
+  border-radius: 5px;
+  background: #ef7d50;
+  color: #fff;
+  font: inherit;
+  font-size: .9em;
+  font-weight: bold;
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+.action:hover,
+.actions button:hover {
+  background: #fff;
+  color: #ef7d50;
+}
+
+.action:active,
+.actions button:active {
+  background: #eee;
+  color: #ef7d50;
+  box-shadow: 0 0 .5em rgba(0, 0, 0, .8) inset;
+}
+
+/* A focus ring sized for things that read as buttons. The browser default is
+   drawn tight around the box; these have a thick border and a radius, so the
+   ring wants offsetting to stay visible against the orange. */
+
+.action:focus-visible,
+.actions button:focus-visible,
+input[type="submit"]:focus-visible {
+  outline: 3px solid #00a0b0;
+  outline-offset: 2px;
+}
+
+/* Irreversible actions should not look like safe ones */
+
+.actions button.danger,
+input[type="submit"].danger {
+  background: #b03030;
+  border-color: #6e1b1b;
+}
+
+.actions button.danger:hover,
+.actions button.danger:active,
+input[type="submit"].danger:hover,
+input[type="submit"].danger:active {
+  background: #fff;
+  color: #b03030;
+}
+
+
+/* The admin editor stacks its fields, label above field, using a <br> in the
+   template rather than the card's floated-label grid. The fields need to be
+   block-level for that: left inline, the hint span after the teaser box sits
+   alongside it instead of underneath. */
+
+#post-form input[type="text"],
+#post-form textarea {
+  display: block;
+}
+
+
+/* Stacked markdown / preview panes in the admin editor — markdown on top,
+   preview underneath, each the full width of the page.
+
+   The template's wrapper is `.editor-panes`; the stylesheet only ever defined
+   `.editor-container`, which belongs to the older full-height editor and carries
+   `flex: 1; overflow: hidden` for that context. This rule gives the admin editor
+   its own column, and overrides `.editor-pane`'s fixed `width: 50%` — in a column
+   the panes want the container's full width, which `align-items: stretch` (the
+   flex default) gives them once the fixed width is out of the way.
+
+   The explicit `height` below is still needed: a plain textarea sizes itself from
+   its rows attribute and the preview div from its content, so without it the two
+   panes come out different lengths. */
+
+.editor-panes {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  margin: 1.5em 0;
+}
+
+.editor-panes > .editor-pane {
+  width: auto;
+  min-width: 0;
+}
+
+.editor-panes .pane-header {
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  border-radius: 5px 5px 0 0;
+  font-weight: bold;
+  font-size: .9em;
+}
+
+.editor-panes textarea,
+.editor-panes #preview {
+  width: 100%;
+  /* Both panes are now on screen one above the other, so a fixed 30em each put
+     most of the preview below the fold. `clamp` reads as: 24vh of the window,
+     never shorter than 12em, never taller than 22em. Both panes take the same
+     value, so they stay level with each other. Drag the textarea's corner for
+     more room on a long post — `resize: vertical` below allows it. */
+  height: clamp(12em, 24vh, 22em);
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 0 0 5px 5px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.editor-panes textarea {
+  font-family: "Courier New", courier, fixed;
+  resize: vertical;
+}
+
+.editor-panes #preview {
+  padding: .8em 1em;
+  overflow-y: auto;
+  line-height: 1.5em;
+}
+
+.editor-panes #preview > :first-child { margin-top: 0; }

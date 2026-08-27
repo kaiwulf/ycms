@@ -7,16 +7,24 @@ _POST_COLUMNS = (
     ' FROM post p JOIN user u ON p.author_id = u.id'
 )
 
-def get_published_posts(limit=None):
+def get_published_posts(limit=None, offset=0):
     """Published posts, newest first. Can never return a draft."""
     sql = _POST_COLUMNS + " WHERE p.status = 'published' ORDER BY p.published_at DESC"
     params = []
 
     if limit is not None:
-        sql += ' LIMIT ?'
+        sql += ' LIMIT ? OFFSET ?'
         params.append(limit)
+        params.append(offset)
     
     return get_db().execute(sql, params).fetchall()
+
+def count_published_posts():
+    """Total number of published posts, for pagination."""
+    row = get_db().execute(
+        "SELECT COUNT(*) FROM post WHERE status = 'published'"
+    ).fetchone()
+    return row[0]
 
 def get_published_post_by_slug(slug):
     """One published post, or None. Returns None for drafts and unknown slugs."""

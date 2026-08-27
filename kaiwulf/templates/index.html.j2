@@ -18,7 +18,7 @@
 {% if latest_posts %}
     {% for post in latest_posts %}
         <article>
-            <h1>{{ post['title'] }}</h1>
+            <h4>{{ post['title'] }}</h4>
             <p class="metadata">
                 by {{ post['username'] }} on {{ post['published_at'].strftime('%Y-%m-%d') }}
             </p>
@@ -28,11 +28,11 @@
         <hr>
         {% endif %}
     {% endfor %}
-    {# <a href="{{ url_for('blog.blog_index') }}"><h3>kai's blog</h3></a> #}
+    <h3></h3><a href="{{ url_for('blog.index') }}">kai's blog</a></h3>
 {% else %}
     <p>No posts yet.</p>
 {% endif %}
-    <h2>Projects</h2>
+    <h4>Projects</h4>
     <p>Coming soon!</p>
     <img id="construction" src="{{ url_for('static', filename='P9Q7.gif') }}" />
 {% endblock %}

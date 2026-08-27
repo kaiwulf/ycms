@@ -18,7 +18,8 @@
 </nav>
 
 {% block content %}
-    <form method="post">
+    <form method="post" class="card">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label method="username">Username</label>
         <input name="username" id="username" required>
         <label for="password">Password</label>

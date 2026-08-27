@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{# A fluid 85%-wide frame instead of the site's fixed 960px one — the editor
+   needs the room. Defined in style.css under `body.wide-page`. #}
+{% block body_class %}wide-page{% endblock %}
+
 {% block wideBox %}
     <h2>Site Administration</h2>
 {% endblock %}
@@ -17,7 +21,6 @@
     <p>
         {{ form.title.label }}<br>
         {{ form.title(size=60) }}
-        {{ form.title(size=60) }}
         {% for error in form.title.errors %}
             <span class="error">{{ error }}</span>
         {% endfor %}
@@ -33,7 +36,7 @@
         </div>
         <div class="editor-pane">
             <div class="pane-header">Preview</div>
-            <div id="preview">{{ (post['body_html'] if post else '') | safe }}<
+            <div id="preview">{{ (post['body_html'] if post else '') | safe }}</div>
         </div>
     </div>
 
