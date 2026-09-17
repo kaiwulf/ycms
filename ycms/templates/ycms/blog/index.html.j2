@@ -1,14 +1,10 @@
-{% extends "base.html" %}
+{% extends "ycms/blog/base.html" %}
 
 {% block title %}Blog{% endblock %}
 
-{% block wideBox %}
-    <h1>What I've been working on</h1>
-{% endblock %}
-
 {% block header %}<h1>Blog Posts</h1>{% endblock %}
 
-    {% block content %}
+    {% block blog_content %}
         {% for post in posts %}
             <article class="post">
                 <header> 
@@ -17,7 +13,7 @@
                     by {{ post['username'] }} on {{ post['published_at'].strftime('%Y-%m-%d') }}
                 </div>
                 </header>
-                <p class="body">{{ post | post_preview }}</p>
+                <p class="body ycms-math">{{ post | post_preview }}</p>
                 <a href="{{ url_for('blog.post', slug=post['slug']) }}">Read more →</a>
             </article>
             {% if not loop.last %}<hr>{% endif %}

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "ycms/blog/base.html" %}
 
 {% block title %}{{ post['title'] }}{% endblock %}
 
@@ -7,13 +7,8 @@
   <p>by {{ post['username'] }} on {{ post['published_at'].strftime('%Y-%m-%d') }}</p>
 {% endblock %}
 
-{% block content %}
+{% block blog_content %}
   <article>
-    <header>
-        <div class="about">
-            {# Not sure what will go here #}
-        </div>
-        </header>
     {{ post['body_html'] |safe}}
   </article>
 {% endblock %}

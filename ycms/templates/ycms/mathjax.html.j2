@@ -1,0 +1,36 @@
+{#
+  MathJax include, gated on whether the page actually contains math.
+
+  Arithmatex normalises every delimiter style to \(...\) and \[...\], so the
+  presence of those two strings is an exact test — it matches both rendered
+  post bodies (inside <span class="arithmatex">) and plain-text previews,
+  where the tags are stripped but the delimiters survive.
+
+  Usage, from any page that might display post content:
+
+      {% from "ycms/mathjax.html" import mathjax %}
+      ...
+      {% set body %}...page content...{% endset %}
+      {{ body }}
+      {{ mathjax(body) }}
+#}
+{% macro mathjax(html) -%}
+    {%- if '\\(' in html or '\\[' in html -%}
+        {# Ignore the document by default; typeset only inside elements arithmatex
+           produced, plus paragraphs a template has explicitly marked as carrying
+           math (previews, where the tags are stripped but delimiters survive).
+           This makes arithmatex the single authority on what counts as math:
+           malformed source now stays visibly untypeset instead of being picked
+           up out of raw prose and rendered wrong. #}
+        <script>
+          window.MathJax = {
+            options: {
+              processHtmlClass: 'arithmatex|ycms-math',
+              ignoreHtmlClass: '.*'
+            }
+          };
+        </script>
+        <script id="MathJax-script" async
+                src="{{ url_for('ycms_static.static', filename='tex-svg.js') }}"></script>
+    {%- endif -%}
+{%- endmacro %}

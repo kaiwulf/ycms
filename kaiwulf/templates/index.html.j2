@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from "ycms/mathjax.html" import mathjax %}
 
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
@@ -15,6 +16,7 @@
 {% block header %}<h1>Kai Wulf Home</h1>{% endblock %}
 
 {% block content %}
+{% set body %}
 {% if latest_posts %}
     {% for post in latest_posts %}
         <article>
@@ -22,7 +24,7 @@
             <p class="metadata">
                 by {{ post['username'] }} on {{ post['published_at'].strftime('%Y-%m-%d') }}
             </p>
-            <p>{{ post | post_preview }}</p>
+            <p class="ycms-math">{{ post | post_preview }}</p>
         </article>
         {% if not loop.last %}
         <hr>
@@ -35,6 +37,9 @@
     <h4>Projects</h4>
     <p>Coming soon!</p>
     <img id="construction" src="{{ url_for('static', filename='P9Q7.gif') }}" />
+{% endset %}
+{{ body }}
+{{ mathjax(body) }}
 {% endblock %}
 
 {% block project %}

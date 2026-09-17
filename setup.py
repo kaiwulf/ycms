@@ -6,6 +6,6 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'flask',
+        'flask', 'markdown', 'nh3', 'flask-wtf', 'pymdown-extensions',
     ],
 )

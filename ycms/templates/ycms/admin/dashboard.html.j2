@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 
-{% block wideBox %}
-    <h2>Site Administration</h2>
-{% endblock %}
-
 {% block header %}
     <h1>{% block title %}Posts{% endblock %}</h1>
     <a class="action" href="{{ url_for('admin.create') }}">New Post</a>

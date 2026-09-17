@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "ycms/mathjax.html" import mathjax %}
+
+{#
+  Chrome shared by every ycms blog page.
+
+  Pages extend THIS instead of "base.html", and fill `blog_content` rather
+  than `content` — a child's block replaces the parent's, so if pages filled
+  `content` directly they would silently discard everything below. A host
+  site can override this one small file to change blog-wide chrome without
+  duplicating index.html or post.html.
+#}
+
+{% block content %}
+    {% set body %}{% block blog_content %}{% endblock %}{% endset %}
+    {{ body }}
+    {{ mathjax(body) }}
+{% endblock %}

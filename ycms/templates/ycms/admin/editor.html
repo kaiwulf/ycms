@@ -4,10 +4,6 @@
    needs the room. Defined in style.css under `body.wide-page`. #}
 {% block body_class %}wide-page{% endblock %}
 
-{% block wideBox %}
-    <h2>Site Administration</h2>
-{% endblock %}
-
 {% block header %}
     <h1>{% block title %}{{ 'Edit Post' if post else 'New Post' }}{% endblock %}</h1>
     <a class="action" href="{{ url_for('admin.dashboard') }}">← All posts</a>

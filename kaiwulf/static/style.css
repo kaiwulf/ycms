@@ -655,3 +655,83 @@ input[type="submit"].danger:active {
 }
 
 .editor-panes #preview > :first-child { margin-top: 0; }
+
+
+/* ---------------------------------------------------------------------------
+   Post body
+
+   Markdown output: everything ycms/markdown.py can emit and the browser was
+   otherwise rendering with defaults. Palette follows the rest of this file
+   (#333 text, #eb6841 / #edc951 accents, #00a0b0 rules).
+   --------------------------------------------------------------------------- */
+
+article {
+  margin-bottom: 2em;
+}
+
+article header {
+  margin-bottom: 1em;
+}
+
+.about {
+  font-size: .85em;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* Fenced code blocks. `pre` scrolls sideways rather than forcing the page
+   to; long lines are common and wrapping them breaks the code. */
+pre {
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  border-left: 3px solid #00a0b0;
+  border-radius: 3px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: .9em;
+}
+
+/* Inline code, distinct from a code block. */
+code {
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  padding: .1em .35em;
+  font-family: "DejaVu Sans Mono", Consolas, Monaco, monospace;
+  font-size: .9em;
+}
+
+blockquote {
+  margin: 1.5em 0;
+  padding: .5em 1.25em;
+  border-left: 3px solid #edc951;
+  color: #555;
+  font-style: italic;
+}
+
+blockquote p:first-child { margin-top: 0; }
+blockquote p:last-child  { margin-bottom: 0; }
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 2em 0;
+}
+
+/* MathJax display equations. Arithmatex wraps inline math in
+   <span class="arithmatex"> and display math in <div class="arithmatex">,
+   so the div is the one that needs breathing room. Long equations scroll
+   rather than overflowing the container. */
+div.arithmatex {
+  margin: 1.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}

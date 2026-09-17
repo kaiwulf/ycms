@@ -9,9 +9,14 @@
   </head>
   <body class="{% block body_class %}{% endblock %}">
     {% block container %}
-        <div class="wideBox">
+        {% set banner %}
             {% block wideBox %}{% endblock %}
-        </div>
+        {% endset %}
+        {% if banner |trim %}
+            <div class="wideBox">
+                {{ banner }}
+            </div>
+        {% endif %}
         <div id="container">
             <a href="{{ url_for('site.index') }}"><img id="logo" src="{{ url_for('static', filename='logo.jpg') }}" alt="Kai News" /></a>
             <section class="content">
